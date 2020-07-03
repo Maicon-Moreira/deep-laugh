@@ -17,8 +17,6 @@ letters = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7, 'i': 
            'B': 27, 'C': 28, 'D': 29, 'E': 30, 'F': 31, 'G': 32, 'H': 33, 'I': 34, 'J': 35, 'K': 36, 'L': 37, 'M': 38, 'N': 39, 'O': 40, 'P': 41, 'Q': 42, 'R': 43, 'S': 44, 'T': 45, 'U': 46, 'V': 47, 'W': 48, 'X': 49, 'Y': 50, 'Z': 51, ' ': 52, '': 53}
 inverted_letters = {v: k for k, v in letters.items()}
 
-print(inverted_letters)
-
 
 def word_to_array(word):
     array = []
@@ -27,7 +25,6 @@ def word_to_array(word):
     while len(array) < 50:
         array.append(53)
     return array
-
 
 def array_to_word(array):
     word = ''
@@ -38,24 +35,13 @@ def array_to_word(array):
 
 
 model = Sequential([
-    # Embedding(54, 10, input_length=50),
-    # LSTM(128)
-    # Dense(10, input_shape=(3,))
-
     Dense(100, input_shape=(num_laughs,)),
-    # Activation('relu'),
-    # Dropout(0.1),
     Dense(500),
-    # Activation('sigmoid'),
-    # Dropout(0.3),
     Dense(50*54),
     Reshape((50, 54))
 ])
 model.compile('adam', 'mse')
 model.summary()
-# plot_model(model, to_file='model.png')
-# plot_model(model, to_file='model.png')
-
 
 xs = []
 ys = []
@@ -74,17 +60,11 @@ for i in range(1000):
 xs = np.array(xs)
 ys = np.array(ys)
 
-print(xs.shape)
-print(ys.shape)
-
 model.fit(xs, ys, epochs=10)
-
 
 created_laughs = []
 for i in range(100):
     bias = np.random.rand(1, num_laughs)**3
-    # print(bias)
-
     array = model.predict(bias)[0]
     array = [np.argmax(item) for item in array]
     word = array_to_word(array)
